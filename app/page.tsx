@@ -1,9 +1,19 @@
-import Image from "next/image";
+import { sql } from "@vercel/postgres";
 
-export default function Home() {
+export default async function Cart({
+  params
+} : {
+  params: { user: string }
+}): Promise<JSX.Element> {
+  const { rows } = await sql`SELECT * from USERS`;
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <h1>Hello, World!</h1>
-    </main>
+    <div>
+      {rows.map((row) => (
+        <div key={row.id}>
+          {row.name} - {row.email}
+        </div>
+      ))}
+    </div>
   );
 }
