@@ -1,11 +1,8 @@
 import { sql } from "@vercel/postgres";
+import { getUsers } from "@/lib/data";
 
-export default async function Cart({
-  params
-} : {
-  params: { user: string }
-}): Promise<JSX.Element> {
-  const { rows } = await sql`SELECT * from USERS`;
+export default async function Cart() {
+  const rows = await getUsers();
 
   return (
     <div>
