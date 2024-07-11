@@ -24,7 +24,10 @@ export default function RootLayout({
             <li><Link href="/about" className="hover:underline underline-offset-4">About</Link></li>
             <li><Link href="/gallery" className="hover:underline underline-offset-4">Gallery</Link></li>
           </ul>
-          <Link href="/login" className="hover:underline underline-offset-4">Log In</Link>
+          <div className="flex justify-center items-center gap-8">
+            <Link href="/new-post" className="bg-white text-black p-2 rounded hover:scale-95 transition duration-200">Add to Gallery</Link>
+            <Link href="/login" className="hover:underline underline-offset-4">Log In</Link>
+          </div>
         </nav>
         {children}
       </body>

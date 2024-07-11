@@ -1,9 +1,9 @@
 'use client'; 
 import { useFormState } from "react-dom";
-import { signUp } from "@/actions/auth";
+import { login } from "@/actions/auth";
 
-export default function AuthForm() {
-  const [formState, formAction] = useFormState(signUp, {}); 
+export default async function AuthForm() {
+  const [formState, formAction] = useFormState(login, {}); 
 
   return (
     <form action={formAction} className="flex flex-col items-center justify-between gap-6 bg-white p-10 min-h-72 rounded-md">

@@ -13,3 +13,14 @@ export async function getUsers() {
     throw new Error('Failed to fetch user data');
   }
 }
+
+export async function getUserByEmail(email: string): Promise<any> {
+  const user = await sql`SELECT * FROM users WHERE email = ${email}`; 
+  const userObj = {
+    id: user.rows[0].id,
+    email: user.rows[0].email,
+    password: user.rows[0].password
+  }
+
+  return userObj; 
+}

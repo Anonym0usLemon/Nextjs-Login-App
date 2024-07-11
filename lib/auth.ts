@@ -33,3 +33,45 @@ export async function createAuthSession(userId: any) {
       sessionCookie.attributes
    );
 }
+
+// For when you have to verify the user on a protected route. 
+export async function verifyAuth() {
+   const sessionCookie = cookies().get(lucia.sessionCookieName);
+   if (!sessionCookie) {
+      return {
+         user: null,
+         session: null
+      };
+   }
+
+   const sessionId = sessionCookie.value; 
+   if (!sessionId) {
+      return {
+         user: null,
+         session: null
+      };
+   }
+
+   const result: any = lucia.validateSession(sessionId); 
+   // refresh session if user is logged in. 
+   try {
+      if (result.session && result.session.fresh) {
+         const sessionCookie = lucia.createSessionCookie(result.session.id) 
+         cookies().set( 
+            sessionCookie.name, 
+            sessionCookie.value, 
+            sessionCookie.attributes
+         );
+      }
+      if (!result.session) {
+         const sessionCookie = lucia.createBlankSessionCookie(); 
+         cookies().set( 
+            sessionCookie.name, 
+            sessionCookie.value, 
+            sessionCookie.attributes
+         );
+      }
+   } catch {/* Ignore errors, don't set the cookie */}
+   return result;
+
+}
