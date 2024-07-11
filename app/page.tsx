@@ -1,4 +1,3 @@
-import { sql } from "@vercel/postgres";
 import { getUsers } from "@/lib/data";
 
 export default async function Cart() {
@@ -6,7 +5,7 @@ export default async function Cart() {
 
   return (
     <div>
-      {rows.map((row) => (
+      {rows?.map((row) => (
         <div key={row.id}>
           {row.name} - {row.email}
         </div>
