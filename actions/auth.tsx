@@ -54,8 +54,8 @@ export async function login(prevState: any, formData: FormData): Promise<any> {
       }
     }
   }
-  console.log(user.id)
 
-  await createAuthSession(user.id);
+  // console.log(user.id.toString());
+  await createAuthSession(user.id.toString());
   redirect('/new-post');
 }

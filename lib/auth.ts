@@ -2,8 +2,11 @@ import { Lucia } from "lucia";
 import { PostgresJsAdapter } from "@lucia-auth/adapter-postgresql";
 import postgres from "postgres";
 import { cookies } from "next/headers";
+import { db } from "@vercel/postgres";
 
-const sql = postgres();
+const connectionString: any = process.env.POSTGRES_URL;
+console.log(connectionString);
+const sql = postgres(connectionString);
 
 // These are the tables Lucia Auth will need access to in order to authenticate the user. 
 const adapter = new PostgresJsAdapter(sql, {
@@ -23,15 +26,20 @@ const lucia = new Lucia(adapter, {
 })
 
 // call when you want to authenticate a user. (you can pass email instead of user id if that works better) 
-export async function createAuthSession(userId: any) {
-   const session = await lucia.createSession(userId, {}); // Creates the database session in your postres database
-   const sessionCookie = lucia.createSessionCookie(session.id) // Creates the session cookie
-   // Sets the cookie
-   cookies().set( 
-      sessionCookie.name, 
-      sessionCookie.value, 
-      sessionCookie.attributes
-   );
+export async function createAuthSession(userId: string) {
+   console.log(userId); 
+   try {
+      const session = await lucia.createSession(userId, {}); // Creates the database session in your postres database
+   } catch (error) {
+      console.log(error); 
+   }
+   // const sessionCookie = lucia.createSessionCookie(session.id) // Creates the session cookie
+   // // Sets the cookie
+   // cookies().set( 
+   //    sessionCookie.name, 
+   //    sessionCookie.value, 
+   //    sessionCookie.attributes
+   // );
 }
 
 // For when you have to verify the user on a protected route. 
@@ -72,6 +80,6 @@ export async function verifyAuth() {
          );
       }
    } catch {/* Ignore errors, don't set the cookie */}
-   return result;
 
+   return result;
 }
