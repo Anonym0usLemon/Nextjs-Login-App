@@ -3,7 +3,7 @@ import { getUserByEmail } from "@/lib/data";
 import { Errors } from "@/lib/interfaces";
 import { unstable_noStore as noStore } from "next/cache";
 import bcrypt from "bcrypt"; 
-import { createAuthSession } from "@/lib/auth";
+import { createAuthSession, destroySession } from "@/lib/auth";
 import { redirect } from "next/navigation";
 
 export async function signUp(prevState: any, formData: FormData): Promise<any> {
@@ -58,4 +58,9 @@ export async function login(prevState: any, formData: FormData): Promise<any> {
   // console.log(user.id.toString());
   await createAuthSession(user.id.toString());
   redirect('/new-post');
+}
+
+export async function logout() {
+  await destroySession(); 
+  redirect('/'); 
 }

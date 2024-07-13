@@ -5,7 +5,6 @@ import { cookies } from "next/headers";
 import { db } from "@vercel/postgres";
 
 const connectionString: any = process.env.POSTGRES_URL;
-console.log(connectionString);
 const sql = postgres(connectionString);
 
 // These are the tables Lucia Auth will need access to in order to authenticate the user. 
@@ -30,16 +29,16 @@ export async function createAuthSession(userId: string) {
    console.log(userId); 
    try {
       const session = await lucia.createSession(userId, {}); // Creates the database session in your postres database
+      const sessionCookie = lucia.createSessionCookie(session.id) // Creates the session cookie
+      // Sets the cookie
+      cookies().set( 
+         sessionCookie.name, 
+         sessionCookie.value, 
+         sessionCookie.attributes
+      );
    } catch (error) {
       console.log(error); 
    }
-   // const sessionCookie = lucia.createSessionCookie(session.id) // Creates the session cookie
-   // // Sets the cookie
-   // cookies().set( 
-   //    sessionCookie.name, 
-   //    sessionCookie.value, 
-   //    sessionCookie.attributes
-   // );
 }
 
 // For when you have to verify the user on a protected route. 
@@ -82,4 +81,21 @@ export async function verifyAuth() {
    } catch {/* Ignore errors, don't set the cookie */}
 
    return result;
+}
+
+export async function destroySession() {
+   const {session} = await verifyAuth() 
+   if (!session) {
+      return {
+         error: 'Unauthorized!'
+      }
+   }
+
+   await lucia.invalidateSession(session.id);
+   const sessionCookie = lucia.createBlankSessionCookie(); 
+   cookies().set( 
+      sessionCookie.name, 
+      sessionCookie.value, 
+      sessionCookie.attributes
+   );
 }
