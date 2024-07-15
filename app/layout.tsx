@@ -6,6 +6,7 @@ import { logout } from "@/actions/auth";
 import { useEffect, useState } from "react";
 import { verifyAuth } from "@/lib/auth";
 
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -14,12 +15,6 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children,}: Readonly<{ children: React.ReactNode; }>) {
-
-  /*
-    TODO: 
-    implement a way to conditionally render "Login" / "Logout" based on when a user is logged in or logged out. 
-  */
-  const isLoggedIn = await verifyAuth();
 
   return (
     <html lang="en">
@@ -32,16 +27,7 @@ export default async function RootLayout({ children,}: Readonly<{ children: Reac
           </ul>
           <div className="flex justify-center items-center gap-8">
             <Link href="/new-post" className="bg-white text-black p-2 rounded hover:scale-95 transition duration-200">Add to Gallery</Link>
-            {
-            /* Login / Logout */
-              !isLoggedIn ? (
-                <form action={logout}>
-                  <button className="hover:underline underline-offset-4">Logout</button>
-                </form>
-              ) : (
-                <Link href="/login" className="hover:underline underline-offset-4">Log In</Link>
-              )
-            }
+            <Link href="/login" className="hover:underline underline-offset-4">Log In</Link>             
           </div>
         </nav>
         {children}
