@@ -13,7 +13,7 @@ This project's purpose was to learn Authentication in NextJs. I've added it to m
 # Project Tasks: 
 - **Task 1: Set up the development environment `npx create-next-app`
   - Install necessary dependencies `npm install @lucia-auth/adapter-postgresql`
-  - Congigure Github repository and import into Vercel
+  - Configure Github repository and import into Vercel
 - **Task 2: Design barebones template for authentication login/testing
   - Set up PostgreSQL database and define Vercel global connection string variable for secure database connection.
 - **Task 3: Implement authentication logic using lucia-auth library
